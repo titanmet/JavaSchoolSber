@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.ratnikov</groupId>
+    <artifactId>SberJavaSchool</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <modules>
+        <module>lesson1_Main_Java_classes_and_packages</module>
+        <module>lesson2_Java_collection_framework</module>
+        <module>lesson3_Generics</module>
+        <module>lesson4_Exception_handling</module>
+        <module>lesson5_Reflection_Proxy_Annotations</module>
+        <module>lesson6_Module_Build tools_Testing</module>
+        <module>lesson7_ClassLoaders</module>
+    </modules>
+
+</project>
