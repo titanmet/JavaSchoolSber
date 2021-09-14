@@ -29,6 +29,7 @@
         <module>lesson6_Module_Build tools_Testing</module>
         <module>lesson7_ClassLoaders</module>
         <module>lesson8_Serialization</module>
+        <module>Lesson9_Lambda. Stream API</module>
     </modules>
 
 </project>
