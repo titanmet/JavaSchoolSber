@@ -16,7 +16,7 @@ public class ReadFile {
         return result;
     }
 
-    public static synchronized void readDataFileDisk() throws IOException {
+    public static void readDataFileDisk() throws IOException {
         Scanner scanner = new Scanner(new File(rootDir + fileName));
         while (scanner.hasNextInt()) {
             int nextInt = scanner.nextInt();
