@@ -31,6 +31,7 @@
         <module>lesson8_Serialization</module>
         <module>Lesson9_Lambda. Stream API</module>
         <module>lesson10_Multithreading1</module>
+        <module>lesson11_Multithreading2</module>
     </modules>
 
 </project>
