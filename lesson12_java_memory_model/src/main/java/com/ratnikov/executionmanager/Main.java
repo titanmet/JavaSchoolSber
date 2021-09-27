@@ -8,8 +8,9 @@ public class Main {
         Thread thread = new Thread(() -> {
             System.out.println(Thread.currentThread().getName() + " - " + Thread.currentThread().getState());
         });
+        Thread.sleep(500);
         thread.start();
-        Thread.sleep(100);
+        thread.interrupt();
         ExecutionManagerImpl executionManager = new ExecutionManagerImpl();
         executionManager.execute(() -> {
             System.out.println("Callback");
