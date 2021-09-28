@@ -33,6 +33,7 @@
         <module>lesson10_Multithreading1</module>
         <module>lesson11_Multithreading2</module>
         <module>lesson12_java_memory_model</module>
+        <module>lesson13_JVM, JIT, GC</module>
     </modules>
 
 </project>

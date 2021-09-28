@@ -1,0 +1,3 @@
+java -XX:+PrintCompilation
+java -XX:+PrintCompilation -XX:+UnlockDiagnosticVMOptions -XX:+PrintInlining  
+
