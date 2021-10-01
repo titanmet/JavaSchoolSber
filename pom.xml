@@ -34,6 +34,7 @@
         <module>lesson11_Multithreading2</module>
         <module>lesson12_java_memory_model</module>
         <module>lesson13_JVM, JIT, GC</module>
+        <module>lesson14_java_util_concurrent</module>
     </modules>
 
 </project>
