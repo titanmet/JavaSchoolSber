@@ -35,6 +35,7 @@
         <module>lesson12_java_memory_model</module>
         <module>lesson13_JVM, JIT, GC</module>
         <module>lesson14_java_util_concurrent</module>
+        <module>lesson15_GOF1_GOF2</module>
     </modules>
 
 </project>
