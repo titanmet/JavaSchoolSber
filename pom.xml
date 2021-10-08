@@ -36,6 +36,7 @@
         <module>lesson13_JVM, JIT, GC</module>
         <module>lesson14_java_util_concurrent</module>
         <module>lesson15_GOF1_GOF2</module>
+        <module>lesson16_JDBC1_JDBC2</module>
     </modules>
 
 </project>
