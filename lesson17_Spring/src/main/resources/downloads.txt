@@ -1,0 +1,3 @@
+http://staff.mmcs.sfedu.ru/~ulysses/IT/Java/SpringIntoduction.pdf
+http://staff.mmcs.sfedu.ru/~ulysses/IT/Java/IO_and_logging.pdf
+http://staff.mmcs.sfedu.ru/~ulysses/IT/Java/Java_birthdays.txt
