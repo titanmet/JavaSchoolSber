@@ -41,7 +41,6 @@ public class TestJdbcTemplate {
         Ingredient egg = new Ingredient();
         egg.setName("Яйцо");
         egg.setKolvo("5 штук");
-
         Ingredient flour = new Ingredient();
         flour.setName("Мука");
         flour.setKolvo("200 грамм");
