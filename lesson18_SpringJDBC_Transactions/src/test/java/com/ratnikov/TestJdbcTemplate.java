@@ -39,7 +39,6 @@ public class TestJdbcTemplate {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "INGREDIENT", "RECIPE");
     }
 
-
     @Test
     public void createBatchIngredients() {
         Ingredient egg = new Ingredient();
