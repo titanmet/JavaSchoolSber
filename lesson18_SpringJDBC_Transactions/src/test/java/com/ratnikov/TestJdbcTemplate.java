@@ -15,9 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JdbcTemplateConfig.class)
@@ -53,14 +50,6 @@ public class TestJdbcTemplate {
         ingredientDao.createIngredients(egg, flour);
 
         ingredientDao.showIngredients();
-    }
-
-    private List<Ingredient> getSomeIngredients(int cnt) {
-        return IntStream.rangeClosed(0, cnt).mapToObj(i -> {
-            Ingredient ingredient = new Ingredient();
-            ingredient.setName("Ингредиент: " + i);
-            return ingredient;
-        }).collect(Collectors.toList());
     }
 }
 

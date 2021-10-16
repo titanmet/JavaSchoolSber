@@ -27,11 +27,6 @@ public class DataConfiguration {
     }
 
     @Bean
-    public LobHandler lobHandler() {
-        return new DefaultLobHandler();
-    }
-
-    @Bean
     public void makeScript() throws SQLException {
         ScriptUtils.executeSqlScript(dataSource().getConnection(), new ClassPathResource("/recipe.sql"));
     }
