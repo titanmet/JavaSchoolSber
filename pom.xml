@@ -38,5 +38,6 @@
         <module>lesson15_GOF1_GOF2</module>
         <module>lesson16_JDBC1_JDBC2</module>
         <module>lesson17_Spring</module>
+        <module>lesson18_SpringJDBC_Transactions</module>
     </modules>
 </project>

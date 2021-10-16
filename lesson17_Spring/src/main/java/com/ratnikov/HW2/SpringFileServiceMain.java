@@ -15,9 +15,8 @@ public class SpringFileServiceMain {
         final ApplicationContext context = new ClassPathXmlApplicationContext("xmlConfig.xml");
         final ReadFileService readFileService = context.getBean("fileReadService", ReadFileService.class);
         List<String> stringStreamFile = readFileService.readFiles(FILE_DOWNLOADS);
-        List<String> stringStreamFileName = readFileService.readNameFile(FILE_DOWNLOADS);
         final DownloadFileService downloadFileService = context.getBean("fileDownloadService", DownloadFileService.class);
-        Map<String, String> map = combineListsIntoOrderedMap(stringStreamFile, stringStreamFileName);
+        Map<String, String> map = combineListsIntoOrderedMap(stringStreamFile, stringStreamFile);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             downloadFileService.downloading(entry.getKey(),entry.getValue());
         }

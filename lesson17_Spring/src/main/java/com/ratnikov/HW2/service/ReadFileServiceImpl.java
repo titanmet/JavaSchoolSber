@@ -19,12 +19,5 @@ public class ReadFileServiceImpl implements ReadFileService {
     public List<String> readFiles(String file) {
         return Files.lines(Paths.get(file)).collect(Collectors.toList());
     }
-
-
-    @Override
-    @SneakyThrows
-    public List<String> readNameFile(String file) {
-        return Files.lines(Paths.get(file)).collect(Collectors.toList());
-    }
 }
 
