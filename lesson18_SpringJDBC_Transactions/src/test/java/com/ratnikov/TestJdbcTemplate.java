@@ -37,6 +37,16 @@ public class TestJdbcTemplate {
     }
 
     @Test
+    public void createIngredient() {
+        Ingredient soda = new Ingredient();
+        soda.setName("Сода");
+        soda.setKolvo("10 грамм");
+        ingredientDao.createIngredient(soda);
+
+        ingredientDao.showIngredients();
+    }
+
+    @Test
     public void createBatchIngredients() {
         Ingredient egg = new Ingredient();
         egg.setName("Яйцо");
@@ -44,10 +54,23 @@ public class TestJdbcTemplate {
         Ingredient flour = new Ingredient();
         flour.setName("Мука");
         flour.setKolvo("200 грамм");
+        Ingredient water = new Ingredient();
+        water.setName("Вода");
+        water.setKolvo("1 стакан");
 
-        ingredientDao.createIngredients(egg, flour);
+        ingredientDao.createIngredients(egg, flour, water);
 
         ingredientDao.showIngredients();
+    }
+
+    @Test
+    public void getAllIngredients() {
+        Ingredient flour = new Ingredient();
+        flour.setName("Колбаса");
+        flour.setKolvo("500 грамм");
+        ingredientDao.createIngredients(flour);
+
+        System.out.println(ingredientDao.getIngredients());
     }
 }
 

@@ -49,10 +49,8 @@ public class IngredientDaoImpl implements IngredientDao {
 
     @Override
     public void createIngredient(Ingredient ingredient) {
-        Number returnKey = insertOperations.executeAndReturnKey(new BeanPropertySqlParameterSource(ingredient));
-        ingredient.setRecipe_id((Integer) returnKey);
-        parameterJdbcOperations.batchUpdate("insert into Ingredient (name, kolvo) values (:name, :kolvo)",
-                SqlParameterSourceUtils.createBatch(ingredient.getRecipe()));
+        parameterJdbcOperations.update("insert into Ingredient (name, kolvo) values (:name, :kolvo)",
+                new BeanPropertySqlParameterSource(ingredient));
     }
 
     @Override
@@ -73,7 +71,7 @@ public class IngredientDaoImpl implements IngredientDao {
 
     @Override
     public void showIngredients() {
-        jdbcTemplate.queryForList("select * from ingredient order by name").forEach(System.out::println);
+        jdbcTemplate.queryForList("select * from ingredient order by id").forEach(System.out::println);
     }
 
     @Override
