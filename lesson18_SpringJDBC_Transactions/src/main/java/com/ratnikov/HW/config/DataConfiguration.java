@@ -7,9 +7,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
-import org.springframework.jdbc.support.lob.DefaultLobHandler;
-import org.springframework.jdbc.support.lob.LobHandler;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
@@ -26,7 +25,7 @@ public class DataConfiguration {
         return new JdbcTemplate(dataSource);
     }
 
-    @Bean
+    @PostConstruct
     public void makeScript() throws SQLException {
         ScriptUtils.executeSqlScript(dataSource().getConnection(), new ClassPathResource("/recipe.sql"));
     }
