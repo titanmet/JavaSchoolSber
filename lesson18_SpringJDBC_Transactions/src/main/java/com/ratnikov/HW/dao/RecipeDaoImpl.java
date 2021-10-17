@@ -40,6 +40,14 @@ public class RecipeDaoImpl implements RecipeDao {
                 .usingGeneratedKeyColumns("id");
     }
 
+    @PostConstruct
+    public void init() {
+        Recipe soup = new Recipe("Борщ");
+        soup.addIngredient(new Ingredient("Мука", "100 грамм"));
+        soup.addIngredient(new Ingredient("Яйцо", "5 штук"));
+        createRecipe(soup);
+    }
+
     @Override
     public Recipe createRecipe(Recipe recipe) {
         Integer returnKey = (Integer) insertOperations.executeAndReturnKey(new BeanPropertySqlParameterSource(recipe));
@@ -68,14 +76,6 @@ public class RecipeDaoImpl implements RecipeDao {
         return recipes;
     }
 
-    @PostConstruct
-    public void init() {
-        Recipe soup = new Recipe("Борщ");
-        soup.addIngredient(new Ingredient("Мука", "100 грамм"));
-        soup.addIngredient(new Ingredient("Яйцо", "5 штук"));
-        createRecipe(soup);
-    }
-
     @Override
     public void showRecipes() {
         jdbcTemplate.queryForList("select * from recipe").forEach(System.out::println);
@@ -85,5 +85,4 @@ public class RecipeDaoImpl implements RecipeDao {
     public void deleteRecipe(int id) {
         jdbcTemplate.update("delete from recipe where id = ?", id);
     }
-
 }

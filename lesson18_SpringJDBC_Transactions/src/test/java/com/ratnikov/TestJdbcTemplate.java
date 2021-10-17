@@ -5,10 +5,12 @@ import com.ratnikov.HW.dao.IngredientDao;
 import com.ratnikov.HW.model.Ingredient;
 import org.h2.tools.Server;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -71,6 +73,12 @@ public class TestJdbcTemplate {
         ingredientDao.createIngredients(flour);
 
         System.out.println(ingredientDao.getIngredients());
+    }
+
+    @Test
+    public void customException() {
+        Assertions.assertTrue(Assertions.assertThrows(DataAccessException.class,
+                ()->ingredientDao.errorSelect()).getMessage().contains("Запрос в неизвестную таблицу"));
     }
 }
 

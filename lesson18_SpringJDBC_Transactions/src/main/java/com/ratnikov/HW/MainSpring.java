@@ -4,9 +4,11 @@ import com.ratnikov.HW.config.JdbcTemplateConfig;
 import com.ratnikov.HW.dao.RecipeDao;
 import com.ratnikov.HW.model.Ingredient;
 import com.ratnikov.HW.model.Recipe;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
