@@ -10,5 +10,4 @@ class Lesson19OrmSpringHibernateApplicationTests {
     void contextLoads() {
     }
 
-
 }
