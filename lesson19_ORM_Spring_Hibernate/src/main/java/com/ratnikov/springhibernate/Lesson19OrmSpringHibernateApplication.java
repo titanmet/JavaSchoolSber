@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -17,6 +18,7 @@ import javax.persistence.Query;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.function.Consumer;
 
 @SpringBootApplication
 public class Lesson19OrmSpringHibernateApplication implements CommandLineRunner {
@@ -32,6 +34,9 @@ public class Lesson19OrmSpringHibernateApplication implements CommandLineRunner 
     @Autowired
     private IngredientRepository ingredientRepository;
 
+    @Autowired
+    private TransactionTemplate transactionTemplate;
+
 
     public static void main(String[] args) {
         SpringApplication.run(Lesson19OrmSpringHibernateApplication.class, args);
@@ -41,16 +46,20 @@ public class Lesson19OrmSpringHibernateApplication implements CommandLineRunner 
     public void init() {
         Recipe sol = new Recipe();
         sol.setName("Солянка");
-        recipeRepository.save(sol);
-        ingredientRepository.save(new Ingredient("Вода", "1 литр", sol));
-        ingredientRepository.save(new Ingredient("Мясо", "1 кг", sol));
-        ingredientRepository.save(new Ingredient("Колбаса", "1 кг", sol));
         Recipe bor = new Recipe();
         bor.setName("Борщ");
-        recipeRepository.save(bor);
-        ingredientRepository.save(new Ingredient("Вода", "1 литр", bor));
-        ingredientRepository.save(new Ingredient("Мясо", "1 кг", bor));
-        ingredientRepository.save(new Ingredient("Овощи", "1 набор", bor));
+        doInTransaction(em -> {
+            recipeRepository.save(sol);
+            ingredientRepository.save(new Ingredient("Вода", "1 литр", sol));
+            ingredientRepository.save(new Ingredient("Мясо", "1 кг", sol));
+            ingredientRepository.save(new Ingredient("Колбаса", "1 кг", sol));
+            recipeRepository.save(bor);
+            ingredientRepository.save(new Ingredient("Вода", "1 литр", bor));
+            ingredientRepository.save(new Ingredient("Мясо", "1 кг", bor));
+            ingredientRepository.save(new Ingredient("Овощи", "1 набор", bor));
+            em.persist(sol);
+            em.persist(bor);
+        });
     }
 
     @PreDestroy
@@ -59,6 +68,10 @@ public class Lesson19OrmSpringHibernateApplication implements CommandLineRunner 
         delete_from_recipe.executeUpdate();
         Query delete_from_ingredient = entityManager.createQuery("delete from Ingredient");
         delete_from_ingredient.executeUpdate();
+    }
+
+    private void doInTransaction(Consumer<EntityManager> consumer) {
+        transactionTemplate.executeWithoutResult(transactionStatus -> consumer.accept(entityManager));
     }
 
     @Override
@@ -87,12 +100,15 @@ public class Lesson19OrmSpringHibernateApplication implements CommandLineRunner 
                 case "add":
                     Recipe soup = new Recipe();
                     soup.setName("Борщ");
-                    recipeRepository.save(soup);
-                    ingredientRepository.save(new Ingredient("Вода", "1 литр", soup));
-                    ingredientRepository.save(new Ingredient("Мясо", "1 кг", soup));
-                    ingredientRepository.save(new Ingredient("Овощи", "1 набор", soup));
-                    List<Recipe> recipesListAdd = recipeDao.findAllRecipe();
-                    recipesListAdd.forEach(recipe -> System.out.println(recipe.toString()));
+                    doInTransaction(em -> {
+                        recipeRepository.save(soup);
+                        ingredientRepository.save(new Ingredient("Вода", "1 литр", soup));
+                        ingredientRepository.save(new Ingredient("Мясо", "1 кг", soup));
+                        ingredientRepository.save(new Ingredient("Овощи", "1 набор", soup));
+                        List<Recipe> recipesListAdd = recipeDao.findAllRecipe();
+                        recipesListAdd.forEach(recipe -> System.out.println(recipe.toString()));
+                        em.persist(soup);
+                    });
                     break;
                 case "delete":
                     recipeDao.deleteRecipe(1);
