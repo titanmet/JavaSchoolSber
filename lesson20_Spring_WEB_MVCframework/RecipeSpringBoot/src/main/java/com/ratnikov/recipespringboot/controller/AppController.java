@@ -60,4 +60,5 @@ public class AppController {
         service.delete(id);
         return "redirect:/";
     }
+
 }
