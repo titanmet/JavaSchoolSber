@@ -39,5 +39,6 @@
         <module>lesson16_JDBC1_JDBC2</module>
         <module>lesson17_Spring</module>
         <module>lesson18_SpringJDBC_Transactions</module>
+        <module>lesson20_Spring_WEB_MVCframework</module>
     </modules>
 </project>

@@ -1,3 +1,5 @@
+package com.ratnikov;
+
 public class AccountsImpl implements Accounts {
     private String user;
     private String password;

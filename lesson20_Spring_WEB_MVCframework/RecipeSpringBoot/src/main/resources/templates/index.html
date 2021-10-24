@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Recipe Manager</title>
+</head>
+<body>
+<div align="center">
+    <h1>Список Рецептов</h1>
+    <a href="/new">Создать новый рецепт</a>
+    <br/><br/>
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Наименование</th>
+            <th>Описание</th>
+            <th>Дата создания</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="recipe : ${listRecipes}">
+            <td th:text="${recipe.id}">Номер</td>
+            <td th:text="${recipe.name}">Наименование</td>
+            <td th:text="${recipe.descriptions}">Описание</td>
+            <td th:text="${recipe.date}">Дата создания</td>
+            <td>
+                <a th:href="@{'/edit/' + ${recipe.id}}">Edit</a>
+                &nbsp;&nbsp;&nbsp;
+                <a th:href="@{'/delete/' + ${recipe.id}}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

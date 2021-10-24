@@ -1,3 +1,5 @@
+package com.ratnikov;
+
 public interface Accounts {
     void registration();
     void authorization();

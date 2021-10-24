@@ -1,4 +1,4 @@
-package
+package com.ratnikov;
 
 import java.util.Arrays;
 import java.util.Iterator;
