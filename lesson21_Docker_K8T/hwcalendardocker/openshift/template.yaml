@@ -1,0 +1,211 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  app: ${MODULE_NAME}
+  version: ${VERSION}
+  type: application
+  template: dataspace-client-template
+  template_version: v1
+  deleteLabel: ${MODULE_NAME}-${VERSION}
+metadata:
+  name: dataspace-client-template
+  annotations:
+    description: |-
+      This is template dataspace-client project
+    iconClass: wheelchair-alt
+    tags: dataspace-client-templates, dataspace-client-template
+objects:
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: cm-${MODULE_NAME}-${VERSION}-app
+    data:
+      override.properties: |-
+        server.port=8080
+        calendar.url=${calendarUrl}
+        management.endpoint.health.enabled=true
+        management.endpoint.health.group.readiness.include=ping
+        management.endpoint.health.group.readiness.show-details=always
+        management.endpoint.health.group.liveness.include=ping
+        management.endpoint.health.group.liveness.show-details=always
+        management.metrics.export.influx.enabled=false
+      jvm-arguments: |-
+
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: ${MODULE_NAME}-${VERSION}
+      labels:
+        app: ${MODULE_NAME}
+        version: ${VERSION}
+    spec:
+      replicas: ${{replicasCount}}
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: ${{maxUnavailable}}
+      selector:
+        matchLabels:
+          app: ${MODULE_NAME}
+          version: ${VERSION}
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: 'false'
+            sidecar.istio.io/proxyLimitsCPU: 200m
+            sidecar.istio.io/proxyLimitsMemory: 256Mi
+            sidecar.istio.io/proxyRequestsCPU: 200m
+            sidecar.istio.io/proxyRequestsMemory: 256Mi
+          labels:
+            app: ${MODULE_NAME}
+            version: ${VERSION}
+        spec:
+          containers:
+            - name: ${MODULE_NAME}
+              image: ${registryUrl}/${registryProject}/welcomer:${TAG}
+              env:
+                - name: JVM_OPTION
+                  valueFrom:
+                    configMapKeyRef:
+                      name: cm-${MODULE_NAME}-${VERSION}-app
+                      key: jvm-arguments
+              ports:
+                - containerPort: 8080
+                  name: http
+              envFrom:
+                - configMapRef:
+                    name: cm-${MODULE_NAME}-${VERSION}-app
+              volumeMounts:
+                - name: app-config
+                  mountPath: /deployments/config
+                  readOnly: true
+              readinessProbe:
+                failureThreshold: 30
+                httpGet:
+                  path: /actuator/health/readiness
+                  port: 8080
+                  scheme: HTTP
+                periodSeconds: 5
+                successThreshold: 1
+                timeoutSeconds: 10
+                initialDelaySeconds: 15
+              livenessProbe:
+                failureThreshold: 30
+                httpGet:
+                  path: /actuator/health/liveness
+                  port: 8080
+                  scheme: HTTP
+                periodSeconds: 5
+                successThreshold: 1
+                timeoutSeconds: 10
+                initialDelaySeconds: 15
+              resources:
+                limits:
+                  cpu: ${{limitCPU}}
+                  memory: ${{limitMemory}}
+                  ephemeral-storage: ${{limitEphemeralStorage}}
+                requests:
+                  cpu: ${{requestCPU}}
+                  memory: ${{requestMemory}}
+                  ephemeral-storage: ${{requestEphemeralStorage}}
+          volumes:
+            - name: app-config
+              configMap:
+                name: cm-${MODULE_NAME}-${VERSION}-app
+                items:
+                  - key: override.properties
+                    path: override.properties
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: svc-${MODULE_NAME}
+      annotations:
+        description: "Dataspace-client-deposit application"
+        # Аннотация для включения сбора метрик
+        prometheus.io.scrape: "true"
+        # Аннотация для указания HTTP endpoint с метриками приложения
+        prometheus.io.path: "/actuator/prometheus"
+        # Аннотация для указания порта подключения к HTTP endpoint с метриками
+        prometheus.io.port: "8080"
+    spec:
+      selector:
+        app: ${MODULE_NAME}
+      ports:
+        - name: http
+          port: 8080
+          targetPort: 8080
+      type: ClusterIP
+
+parameters:
+  - description: Service name to deploy
+    displayName: ServiceName
+    name: MODULE_NAME
+  - description: Service name to deploy
+    displayName: ServiceName
+    name: VERSION
+    value: "snapshot"
+  - description: Url to Registry. Example sigma "registry.sigma.sbrf.ru" alpha "registry.ca.sbrf.ru"
+    displayName: RegistryUrl
+    name: registryUrl
+  - description: Registry Project. Example "pprb/ci00682829_cdm"
+    displayName: RegistryProject
+    name: registryProject
+  - description: Url to instance dataspace-core with your Model
+    displayName: dataSpaceCoreUrl
+    name: dataSpaceCoreUrl
+  - description: Url to fluentbit image
+    displayName: FluentBitImage
+    name: FLUENTBIT_IMAGE
+  - description: Enable remote debug port (true/false)
+    displayName: RunDebug
+    name: RUN_DEBUG
+    value: "true"
+  - description: Limit CPU millicores main container
+    displayName: MiliCores
+    name: limitCPU
+    value: "1500m"
+  - description: Limit Memory millicores main container
+    displayName: Memory_Size
+    name: limitMemory
+    value: "1024Mi"
+  - description:  Request CPU millicores main container
+    displayName: MiliCores
+    name: requestCPU
+    value: "1500m"
+  - description: Request Memory millicores main container
+    displayName: Memory_Size
+    name: requestMemory
+    value: "1024Mi"
+  - description: Number of replicas. For PROM change to 2
+    displayName: replicasCount
+    name: replicasCount
+    value: "1"
+  - description: Max unavailable pod
+    displayName: MaxUnavailable
+    name: maxUnavailable
+    value: "25%"
+  - description: limit size for ephemeral storage
+    displayName: limitEphemeralStorage
+    name: limitEphemeralStorage
+    value: "2Gi"
+  - description: request size for ephemeral storage
+    displayName: requestEphemeralStorage
+    name: requestEphemeralStorage
+    value: "2Gi"
+  - description: limit size for fluentBit ephemeral storage
+    displayName: fluentBitLimitEphemeralStorage
+    name: fluentBitLimitEphemeralStorage
+    value: "500Mi"
+  - description: request size for fluentBit ephemeral storage
+    displayName: fluentBitRequestEphemeralStorage
+    name: fluentBitRequestEphemeralStorage
+    value: "500Mi"
+  - description: image tag
+    displayName: image tag
+    name: TAG
+    value: "latest"
+  - description: calendarUrl
+    displayName: calendarUrl
+    name: calendarUrl
+    value: "http://svc-calendar:8080/"

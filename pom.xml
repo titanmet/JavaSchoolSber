@@ -40,5 +40,6 @@
         <module>lesson17_Spring</module>
         <module>lesson18_SpringJDBC_Transactions</module>
         <module>lesson20_Spring_WEB_MVCframework</module>
+        <module>lesson21_Docker_K8T</module>
     </modules>
 </project>

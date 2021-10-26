@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Spring Boot Calendar</title>
+    <link th:rel="stylesheet" th:href="@{assets/select2-develop/dist/css/select2.css}"/>
+    <link th:rel="stylesheet" th:href="@{assets/select2-bootstrap4-theme-master/dist/select2-bootstrap4.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link rel="stylesheet" href="css/clock.css">
+</head>
+<body>
+<div class="container">
+    <h1 id="date" align="center" th:text="${#dates.format(datetime, 'dd MMMM yyyy')}"></h1>
+    <div id="clock">
+        <div id="time" class="glow"></div>
+    </div>
+</div>
+
+<script>
+    let getTime = document.getElementById("time");
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+
+    function startTime() {
+        let today = new Date();
+        let h = today.getHours();
+
+        let m = today.getMinutes();
+        let s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        getTime.innerHTML = h + ":" + m + ":" + s;
+        t = setTimeout(function () {
+            startTime();
+        }, 500);
+    }
+
+    startTime();
+
+</script>
+
+</body>
+</html>

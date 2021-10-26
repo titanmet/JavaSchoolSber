@@ -1,0 +1,21 @@
+# Файл docker-compose должен начинаться с тега версии.
+version: "3"
+
+# Следует учитывать, что docker-composes работает с сервисами.
+# 1 сервис = 1 контейнер.
+# Сервисом может быть клиент, сервер, сервер баз данных...
+# Раздел, в котором будут описаны сервисы, начинается с 'services'.
+
+services:
+  calendar:
+    image: "docker-calendarsimple-v1:latest"
+    ports:
+      - 8080:8080
+  calendar_hw:
+    image: "docker-hwcalendardocker-v1:latest"
+    ports:
+      - 8082:8080
+    environment:
+      RUN_ARG: "--calendar.url=http://calendar:8080"
+    depends_on:
+      - calendar
