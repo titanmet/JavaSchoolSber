@@ -42,5 +42,6 @@
         <module>lesson20_Spring_WEB_MVCframework</module>
         <module>lesson21_Docker_K8T</module>
         <module>lesson22_Introduction_in_test_automation,_UI_autotests</module>
+        <module>lesson23_Selenium_Selenide</module>
     </modules>
 </project>
