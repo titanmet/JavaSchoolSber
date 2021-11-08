@@ -5,6 +5,8 @@ import com.ratnikov.model.CreateUserResponse;
 import com.ratnikov.model.UserPogo;
 import com.ratnikov.steps.UserSteps;
 import com.ratnikov.utils.UserGenerator;
+import com.ratnikov.utils.UserPatch;
+import com.ratnikov.utils.UserUpdate;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.filter.Filter;
@@ -29,12 +31,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class RestTest {
-//    private static final RequestSpecification REQUEST_SPECIFICATION =
-//            new RequestSpecBuilder()
-//                    .setBaseUri("https://reqres.in/api")
-//                    .setBasePath("/users")
-//                    .setContentType(ContentType.JSON)
-//                    .build();
+    private static final RequestSpecification REQUEST_SPECIFICATION =
+            new RequestSpecBuilder()
+                    .setBaseUri("https://reqres.in/api")
+                    .setBasePath("/users")
+                    .setContentType(ContentType.JSON)
+                    .build();
 
     @Test
     public void getUsers() {
@@ -102,6 +104,40 @@ public class RestTest {
                 .contentType(ContentType.JSON)
                 .body(rq)
                 .when().post()
+                .then()
+                .log().all()
+                .extract().as(CreateUserResponse.class);
+
+        assertThat(rs)
+                .isNotNull()
+                .extracting(CreateUserResponse::getName)
+                .isEqualTo(rq.getName());
+    }
+
+    @Test
+    public void putUsers() {
+        CreateUserRequest rq = UserUpdate.putSimpleUser();
+        CreateUserResponse rs = given()
+                .spec(REQUEST_SPECIFICATION)
+                .body(rq)
+                .when().put()
+                .then()
+                .log().all()
+                .extract().as(CreateUserResponse.class);
+
+        assertThat(rs)
+                .isNotNull()
+                .extracting(CreateUserResponse::getName)
+                .isEqualTo(rq.getName());
+    }
+
+    @Test
+    public void patchUsers() {
+        CreateUserRequest rq = UserPatch.patchSimpleUser();
+        CreateUserResponse rs = given()
+                .spec(REQUEST_SPECIFICATION)
+                .body(rq)
+                .when().patch()
                 .then()
                 .log().all()
                 .extract().as(CreateUserResponse.class);
