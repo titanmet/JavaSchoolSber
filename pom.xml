@@ -44,5 +44,6 @@
         <module>lesson22_Introduction_in_test_automation,_UI_autotests</module>
         <module>lesson23_Selenium_Selenide</module>
         <module>lesson24_Introduction_in_API_tests_Rest_Assured</module>
+        <module>lesson25_BDD_Cucumber_Allure_CI_CD_Jenkins</module>
     </modules>
 </project>
